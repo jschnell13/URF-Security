@@ -13,6 +13,16 @@ toolCheck = ""
 sensCheck = ""
 sensCheck2 = ""
 authCheck = ""
+f1Check = ""
+l1Check = ""
+f2Check = ""
+l2Check = ""
+ptDropCheck = ""
+rwDropCheck = ""
+passDropCheck = ""
+otpDropCheck = ""
+clearCheck = 0
+results_displayed = 0
 
 # Definitions
 cDef = "Confidentiality: A measure indicating to which degree sensitive information may be known by entities who are" \
@@ -63,6 +73,16 @@ app.layout = html.Div(children=[
     html.H4(id='sensCheck', children='', style={'display': 'none'}),
     html.H4(id='sensCheck2', children='', style={'display': 'none'}),
     html.H4(id='authCheck', children='', style={'display': 'none'}),
+    html.H4(id='f1Check', children='', style={'display': 'none'}),
+    html.H4(id='l1Check', children='', style={'display': 'none'}),
+    html.H4(id='f2Check', children='', style={'display': 'none'}),
+    html.H4(id='l2Check', children='', style={'display': 'none'}),
+    html.H4(id='ptDropCheck', children='', style={'display': 'none'}),
+    html.H4(id='rwDropCheck', children='', style={'display': 'none'}),
+    html.H4(id='passDropCheck', children='', style={'display': 'none'}),
+    html.H4(id='otpDropCheck', children='', style={'display': 'none'}),
+    html.H4(id='clearCheck', children='', style={'display': 'none'}),
+    html.H4(id='results_displayed', children='0', style={'display': 'none'}),
 
     html.Div(id='title-container', children=[  # Title
         html.H1(id='title', children='Cybersecurity Mission')],
@@ -76,10 +96,10 @@ app.layout = html.Div(children=[
     html.Div(id='option-container', children=[
         html.Div(id='cia-container', children=[
             html.H2(children='Control Panel'),
-            html.H4(children='Select Tool',
+            html.H4(children='Select Visualization Tool',
                     id='tool-text', style={'line-height': '.3'}),
             dcc.Dropdown(id='tool-dropdown',
-                         placeholder='Select Visualization Tool',
+                         placeholder='Select Tool',
                          options=['Confidentiality', 'Integrity', 'Authentication'],
                          value='',
                          clearable=True,
@@ -174,13 +194,14 @@ app.layout = html.Div(children=[
         html.Div(id='buttonDashDiv', children=[
             html.Div(id='submit_container', children=[
                 html.Button(children='Submit', id='submitButton', n_clicks=0)],
-                     style={'display': 'inline-block', 'margin-top': '2%', 'margin-left': '2%', 'margin-right': '4%'}),
+                     style={'display': 'inline-block', 'margin-top': '2%', 'margin-left': '2%', 'margin-right': '4%',
+                            }),
             html.Div(id='clear_container', children=[
                 html.Button(children='Clear', id='clearButton', n_clicks=0)],
                      style={'display': 'inline-block', 'margin-top': '2%', 'margin-left': '4%', 'margin-right': '2%'}),
         ], style={'display': 'block'})],
-        style={'display': 'inline-block', 'width': '18%', 'verticalAlign': 'top',
-               'margin-right': '2%', 'margin-left': '2%'}),
+             style={'display': 'inline-block', 'width': '18%', 'verticalAlign': 'top',
+                    'margin-right': '2%', 'margin-left': '2%'}),
     html.Div(id='mid_Screen', children=[
         html.Div(id='cia-image-container', children=[
             html.Img(id='v_img', src='/assets/startMenu.png',
@@ -271,6 +292,7 @@ app.layout = html.Div(children=[
     Output(component_id='dataDiveButton', component_property='n_clicks'),
     Output(component_id='defButton', component_property='children'),
     Output(component_id='defButton', component_property='n_clicks'),
+    Output(component_id='submitButton', component_property='children'),
     Output(component_id='submitButton', component_property='n_clicks'),
     Output(component_id='sensitivity-dropdown', component_property='value'),
     Output(component_id='authFactor-dropdown', component_property='value'),
@@ -286,15 +308,36 @@ app.layout = html.Div(children=[
     Output(component_id='sensCheck', component_property='children'),
     Output(component_id='sensCheck2', component_property='children'),
     Output(component_id='authCheck', component_property='children'),
+    Output(component_id='f1Check', component_property='children'),
+    Output(component_id='l1Check', component_property='children'),
+    Output(component_id='f2Check', component_property='children'),
+    Output(component_id='l2Check', component_property='children'),
+    Output(component_id='ptDropCheck', component_property='children'),
+    Output(component_id='rwDropCheck', component_property='children'),
+    Output(component_id='passDropCheck', component_property='children'),
+    Output(component_id='otpDropCheck', component_property='children'),
+    Output(component_id='clearCheck', component_property='children'),
+    Output(component_id='results_displayed', component_property='children'),
     Output(component_id='title', component_property='className'),
     Output(component_id='title', component_property='children'),
     Output(component_id='status', component_property='className'),
+    Output(component_id='submitButton', component_property='className'),
 ],
     [Input(component_id='tool-dropdown', component_property='value'),
      Input(component_id='toolCheck', component_property='children'),
      Input(component_id='sensCheck', component_property='children'),
      Input(component_id='sensCheck2', component_property='children'),
      Input(component_id='authCheck', component_property='children'),
+     Input(component_id='f1Check', component_property='children'),
+     Input(component_id='l1Check', component_property='children'),
+     Input(component_id='f2Check', component_property='children'),
+     Input(component_id='l2Check', component_property='children'),
+     Input(component_id='ptDropCheck', component_property='children'),
+     Input(component_id='rwDropCheck', component_property='children'),
+     Input(component_id='passDropCheck', component_property='children'),
+     Input(component_id='otpDropCheck', component_property='children'),
+     Input(component_id='clearCheck', component_property='children'),
+     Input(component_id='results_displayed', component_property='children'),
      Input(component_id='first_1', component_property='value'),
      Input(component_id='last_1', component_property='value'),
      Input(component_id='first_2', component_property='value'),
@@ -303,6 +346,7 @@ app.layout = html.Div(children=[
      Input(component_id='dataDiveButton', component_property='n_clicks'),
      Input(component_id='defButton', component_property='n_clicks'),
      Input(component_id='submitButton', component_property='n_clicks'),
+     Input(component_id='clearButton', component_property='n_clicks'),
      Input(component_id='sensitivity-dropdown', component_property='value'),
      Input(component_id='authFactor-dropdown', component_property='value'),
      Input(component_id='plaintext-dropdown', component_property='value'),
@@ -310,8 +354,9 @@ app.layout = html.Div(children=[
      Input(component_id='password-dropdown', component_property='value'),
      Input(component_id='otp-dropdown', component_property='value'),
      ])
-def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, helpClicks, dataDiveClicks, defClicks,
-                 submitClicks, sensitivity_dropdown=None, auth_dropdown=None, pt_dropdown=None,
+def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1C, l1C, f2C, l2C, ptDC, rwDC, pDC, otpDC,
+                 clear_clicks, r_displayed, f1, l1, f2, l2, helpClicks, dataDiveClicks, defClicks,
+                 submitClicks, clearClicks, sensitivity_dropdown=None, auth_dropdown=None, pt_dropdown=None,
                  rw_dropdown=None, pass_dropdown=None, otp_dropdown=None):
     a_drop = {'display': 'none'}
     a_text = {'display': 'none'}
@@ -365,16 +410,33 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
                 'text-align': 'center',
                 'background-image': 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1))'}
     def_cont = {'display': 'none', 'margin-top': '2%', 'margin-left': '7%', 'margin-right': '10%'}
+    submit_style = ''
     attack_text = ''
     title_animate = ''
     status_animate = ''
+    num_clear = clear_clicks
     title_text = 'Cybersecurity Mission'  # Title only changes in attack instance
+    submit_clicks = submitClicks  # fix box outline color, add text, fix right text boxes
+    display_menu = 0  # indicates whether to display a menu, and if so which one
 
     # Used to deduce whether options have changed
     tool_current = ''
     sens_current = ''
     sens_current2 = ''
     auth_current = ''
+    f1C_current = ''
+    l1C_current = ''
+    f2C_current = ''
+    l2C_current = ''
+    ptDC_current = ''
+    rwDC_current = ''
+    pDC_current = ''
+    otpDC_current = ''
+    pt_case = 0
+    pass_case = 0
+    otp_case = 0
+    rw_case = 0
+    r_past = r_displayed
     current_changed = 0  # Used to regulate box color
 
     # Set Variables
@@ -423,13 +485,19 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
             case = 1
         elif pt_dropdown == 'Unknown':
             case = 2
+            pt_case = 1
+            ptDC_current = 1
             attack_text = cNoAttack
         elif (pt_dropdown == 'Known') & (usertrue == 1):
             case = 3
+            pt_case = 2
+            ptDC_current = 2
             output_case = "Owner of Data"
             attack_text = cOwner
         elif (pt_dropdown == 'Known') & (usertrue == 0):
             case = 4
+            pt_case = 2
+            ptDC_current = 2
             output_case = "Confidentiality Attack"
             attack_text = cAttack
 
@@ -502,18 +570,25 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
         if auth_dropdown == 'One-Factor':
             auth_current = 1
 
+            pass_case = 0
             if (pass_dropdown is None) or (usertrue is None):
                 case = 1
             elif (pass_dropdown == 'Incorrect') & (usertrue == 1):
                 case = 2
+                pass_case = 1
+                pDC_current = 1
                 output_case = "Forgotten Password"
                 attack_text = aNoAttack1
             elif (pass_dropdown == 'Correct') & (usertrue == 1):
                 case = 3
+                pass_case = 2
+                pDC_current = 2
                 output_case = "Correct Authentication"
                 attack_text = aOwner1
             elif (pass_dropdown == 'Correct') & (usertrue == 0):
                 case = 4
+                pass_case = 2
+                pDC_current = 2
                 output_case = "Authentication Attack"
                 attack_text = aAttack1
 
@@ -536,22 +611,42 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
                 case = 1
             elif (usertrue == 1) & (pass_dropdown == 'Incorrect') & (otp_dropdown == 'Incorrect'):
                 case = 2
+                pass_case = 1
+                pDC_current = 1
+                otp_case = 1
+                otpDC_current = 1
                 output_case = "Forgotten Password"
                 attack_text = aNoAttack1
             elif (usertrue == 1) & (pass_dropdown == 'Correct') & (otp_dropdown == 'Correct'):
                 case = 3
+                pass_case = 2
+                pDC_current = 2
+                otp_case = 2
+                otpDC_current = 2
                 output_case = "Correct Authentication"
                 attack_text = aOwner3
             elif (usertrue == 0) & (pass_dropdown == 'Correct') & (otp_dropdown == 'Correct'):
                 case = 4
+                pass_case = 2
+                pDC_current = 2
+                otp_case = 2
+                otpDC_current = 2
                 output_case = "Authentication Attack"
                 attack_text = aAttack3
             elif (usertrue == 1) & (pass_dropdown == 'Correct') & (otp_dropdown == 'Incorrect'):
                 case = 5
+                pass_case = 2
+                pDC_current = 2
+                otp_case = 1
+                otpDC_current = 1
                 output_case = "Partial Correct Authentication"
                 attack_text = aOwner2
             elif (usertrue == 0) & (pass_dropdown == 'Correct') & (otp_dropdown == 'Incorrect'):
                 case = 6
+                pass_case = 2
+                pDC_current = 2
+                otp_case = 1
+                otpDC_current = 1
                 output_case = "Partial Authentication Attack"
                 attack_text = aAttack2
 
@@ -605,13 +700,19 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
             case = 1
         elif rw_dropdown == 'No':
             case = 2
+            rw_case = 1
+            rwDC_current = 1
             attack_text = iNoAttack
         elif (rw_dropdown == 'Yes') & (usertrue == 1):
             case = 3
+            rw_case = 2
+            rwDC_current = 2
             output_case = "Owner of Data"
             attack_text = iOwner
         elif (rw_dropdown == 'Yes') & (usertrue == 0):
             case = 4
+            rw_case = 2
+            rwDC_current = 2
             output_case = "Integrity Attack"
             attack_text = iAttack
 
@@ -659,38 +760,46 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
 
     help_button_text = "Help"
     help_clicks = helpClicks
+    data_button_text = "Data Dive"
+    data_clicks = dataDiveClicks
+    def_button_text = "Definition"
+    def_clicks = defClicks
+
     if (help_clicks > 0) and ((help_clicks % 2) == 0):  # exits help menu
         help_button_text = "Help"
         help_clicks = 0
 
     if (help_clicks > 0) and ((help_clicks % 2) != 0):  # displays help menu
         help_button_text = "Exit"
-        venn_image = '/assets/helpMenu.png'
+        display_menu = 1
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
 
-    data_button_text = "Data Dive"
-    data_clicks = dataDiveClicks
     if (data_clicks > 0) and ((data_clicks % 2) == 0):  # exits data menu
         data_button_text = "Data Dive"
         data_clicks = 0
 
     if (data_clicks > 0) and ((data_clicks % 2) != 0):  # displays data menu
         data_button_text = "Exit"
-        venn_image = '/assets/dataMenu.png'
+        display_menu = 2
+        help_button_text = "Help"
+        help_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
 
-    def_button_text = "Definition"
-    def_clicks = defClicks
     if (def_clicks > 0) and ((def_clicks % 2) == 0):  # exits definition menu
         def_button_text = "Definition"
         def_clicks = 0
 
     if (def_clicks > 0) and ((def_clicks % 2) != 0):  # displays definition menu
         def_button_text = "Exit"
-        if selected_dropdown == 'Confidentiality':  # used to show correct definition
-            venn_image = '/assets/confidentialityMenu.png'
-        elif selected_dropdown == 'Authentication':
-            venn_image = '/assets/authenticationMenu.png'
-        elif selected_dropdown == 'Integrity':
-            venn_image = '/assets/integrityMenu.png'
+        display_menu = 3
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        help_button_text = "Help"
+        help_clicks = 0
 
     # Checks whether to clear fields, set fields equal to themselves if no change
     sensDrop = sensitivity_dropdown
@@ -704,8 +813,30 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
     passDrop = pass_dropdown
     otpDrop = otp_dropdown
 
+    # Clear button functionality
+    if ((num_clear != clearClicks) and (clearClicks != 0)) and ((sensDrop != '') or (authDrop != '') or (f1_box != '') or (l1_box != '') or
+       (f2_box != '') or (l2_box != '') or (ptDrop != '') or (rwDrop != '') or (passDrop != '') or
+       (otpDrop != '')):
+        num_clear = clearClicks
+        sensDrop = ''
+        authDrop = ''
+        f1_box = ''
+        l1_box = ''
+        f2_box = ''
+        l2_box = ''
+        ptDrop = ''
+        rwDrop = ''
+        passDrop = ''
+        otpDrop = ''
+        submit_clicks = 0
+        submit_button_text = "Submit"
+
+    submit_ok = 1  # indicates submit button is activated
     if tool_current != tool:  # Change in tool selection
         current_changed = 1
+        submit_clicks = 0
+        submit_ok = 0
+        display_menu = 0
         sensDrop = ''
         authDrop = ''
         f1_box = ''
@@ -718,6 +849,15 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
         otpDrop = ''
         sens_current = ''
         sens_current2 = ''
+        help_button_text = "Help"
+        help_clicks = 0
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
+        submit_clicks = 0
+        submit_button_text = "Submit"
+        display_menu = 0
         if selected_dropdown == 'Confidentiality':
             venn_image = '/assets/confidentialityStart.png'
         if selected_dropdown == 'Authentication':
@@ -727,11 +867,23 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
 
     if sens_current != sens1:  # Change in confidentiality sensitivity
         current_changed = 1
+        submit_clicks = 0
+        submit_ok = 0
+        display_menu = 0
         f1_box = ''
         l1_box = ''
         f2_box = ''
         l2_box = ''
         ptDrop = ''
+        help_button_text = "Help"
+        help_clicks = 0
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
+        submit_clicks = 0
+        submit_button_text = "Submit"
+        display_menu = 0
         if sens_current == 0:
             venn_image = '/assets/unclassified_base.png'
         elif sens_current == 1:
@@ -743,11 +895,23 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
 
     if sens_current2 != sens2:  # Change in integrity sensitivity
         current_changed = 1
+        submit_clicks = 0
+        submit_ok = 0
+        display_menu = 0
         f1_box = ''
         l1_box = ''
         f2_box = ''
         l2_box = ''
         rwDrop = ''
+        help_button_text = "Help"
+        help_clicks = 0
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
+        submit_clicks = 0
+        submit_button_text = "Submit"
+        display_menu = 0
         if sens_current2 == 0:
             venn_image = '/assets/unclassified_base_integrity.png'
         elif sens_current2 == 1:
@@ -759,30 +923,105 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
 
     if auth_current != auth:  # Change in number of authentication factors
         current_changed = 1
+        submit_clicks = 0
+        submit_ok = 0
+        display_menu = 0
         f1_box = ''
         l1_box = ''
         f2_box = ''
         l2_box = ''
         passDrop = ''
         otpDrop = ''
+        help_button_text = "Help"
+        help_clicks = 0
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
+        submit_clicks = 0
+        submit_button_text = "Submit"
+        display_menu = 0
         if auth_current == 1:
             venn_image = '/assets/secret_base_auth.png'
         elif auth_current == 2:
             venn_image = '/assets/secret_base_auth2.png'
 
-    submit_clicks = submitClicks # fix box outline color, add text, fix right text boxes
-    if (submit_clicks >= 0) and ((submit_clicks % 2) == 0):  # exits menu, display instructions
+    submit_button_text = "Submit"
+    if selected_dropdown == 'Confidentiality':
+        if (f1_box == '') or (l1_box == '') or (f2_box == '') or (l2_box == '') or (ptDrop == ''):
+            submit_ok = 0
+    if selected_dropdown == 'Integrity':
+        if (f1_box == '') or (l1_box == '') or (f2_box == '') or (l2_box == '') or (rwDrop == ''):
+            submit_ok = 0
+    if (auth_current == 1) and (selected_dropdown == 'Authentication'):
+        if (f1_box == '') or (l1_box == '') or (f2_box == '') or (l2_box == '') or (passDrop == ''):
+            submit_ok = 0
+    if (auth_current == 2) and (selected_dropdown == 'Authentication'):
+        if ((f1_box == '') or (l1_box == '') or (f2_box == '') or (l2_box == '') or
+                (passDrop == '') or (otpDrop == '')):
+            submit_ok = 0
+
+    time_to_go = 1  # indicates whether box color should change; 1=true, 0=false
+    if ((submit_clicks >= 0) and (submit_clicks % 2) == 0) or (submit_ok == 0):  # instructions currently displayed
+        time_to_go = 0
         submit_clicks = 0
-        if selected_dropdown == 'Confidentiality':  # used to show correct definition
-            venn_image = '/assets/confidentialityMenu.png'
-        elif selected_dropdown == 'Authentication':
-            venn_image = '/assets/authenticationMenu.png'
-        elif selected_dropdown == 'Integrity':
-            venn_image = '/assets/integrityMenu.png'
+        submit_button_text = "Submit"
+        attack_text = ''
+        output_case = "No Attack"
+        if display_menu == 0:
+            if selected_dropdown == 'Confidentiality':  # used to show correct definition
+                venn_image = '/assets/confidentialityStart.png'
+            elif selected_dropdown == 'Authentication':
+                venn_image = '/assets/authenticationStart.png'
+            elif selected_dropdown == 'Integrity':
+                venn_image = '/assets/integrityStart.png'
 
-    #  if (submit_clicks > 0) and ((submit_clicks % 2) != 0):  # displays menu, display results
+    r_displayed = 0
+    if (submit_clicks > 0) and ((submit_clicks % 2) != 0):  # results currently displayed
+        submit_button_text = "Back"
+        help_button_text = "Help"
+        help_clicks = 0
+        data_button_text = "Data Dive"
+        data_clicks = 0
+        def_button_text = "Definition"
+        def_clicks = 0
+        display_menu = 0
+        r_displayed = 1
 
-    if (case != 1) & (current_changed == 0):  # Will show attack definition if options have been chosen
+    if ((f1 != f1Check) or (l1 != l1Check) or  # used if results are displayed and something changes
+        (f2 != f2Check) or (l2 != l2Check) or (pt_case != ptDC_current) or (rw_case != rwDC_current) or
+        (pass_case != pDC_current) or (otp_case != otpDC_current)) and ((r_displayed == 1) and (r_past == 1)):
+        r_displayed = 0
+        time_to_go = 0
+        submit_clicks = 0
+        submit_button_text = "Submit"
+        if display_menu == 0:
+            if selected_dropdown == 'Confidentiality':  # used to show correct definition
+                venn_image = '/assets/confidentialityStart.png'
+            elif selected_dropdown == 'Authentication':
+                venn_image = '/assets/authenticationStart.png'
+            elif selected_dropdown == 'Integrity':
+                venn_image = '/assets/integrityStart.png'
+
+    if display_menu != 0:  # Displays menu options
+        time_to_go = 0
+        if display_menu == 1:
+            venn_image = '/assets/helpMenu.png'
+        if display_menu == 2:
+            venn_image = '/assets/dataMenu.png'
+        if display_menu == 3:
+            if selected_dropdown == 'Confidentiality':  # used to show correct definition
+                venn_image = '/assets/confidentialityMenu.png'
+            elif selected_dropdown == 'Authentication':
+                venn_image = '/assets/authenticationMenu.png'
+            elif selected_dropdown == 'Integrity':
+                venn_image = '/assets/integrityMenu.png'
+
+    if submit_ok == 0:
+        submit_style = 'clickDis'
+
+    if (case != 1) & (current_changed == 0) & (
+            time_to_go == 1):  # Will show attack definition if options have been chosen
         attack_cont = {'display': 'block', 'border-radius': '5px',
                        'padding-top': '1%', 'padding-bottom': '1%', 'padding-right': '1%', 'padding-left': '1%',
                        'margin-top': '2%', 'margin-bottom': '1%', 'margin-right': '1%', 'margin-left': '1%',
@@ -791,7 +1030,7 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
                        'background-image': 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1))',
                        }
 
-    if (case == 4) & (current_changed == 0):  # indicates attack, will make picture outline red
+    if (case == 4) & (current_changed == 0) & (time_to_go == 1):  # indicates attack, will make picture outline red
         img_cont = {'display': 'block', 'border-radius': '5px',
                     'background-image': 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1))',
                     'margin-top': '1%', 'margin-bottom': '1%', 'margin-right': '1%', 'margin-left': '1%',
@@ -834,7 +1073,8 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
         if selected_dropdown == 'Authentication':
             title_text = 'AUTHENTICATION ATTACK'
 
-    if (case == 6) & (current_changed == 0):  # indicates partial attack, will make picture outline yellow
+    if (case == 6) & (current_changed == 0) & (
+            time_to_go == 1):  # indicates partial attack, will make picture outline yellow
         img_cont = {'display': 'block', 'border-radius': '5px',
                     'background-image': 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1))',
                     'margin-top': '1%', 'margin-bottom': '1%', 'margin-right': '1%', 'margin-left': '1%',
@@ -876,10 +1116,12 @@ def update_graph(selected_dropdown, tool, sens1, sens2, auth, f1, l1, f2, l2, he
             a_text, a_drop, pt_text, pt_drop, rw_text, rw_drop,
             pw_text, pw_drop, otp_text, otp_drop, sens_text, sens_drop, claim_text, first1_box, last1_box, id_text,
             first2_box, last2_box, output_case, attack_text, help_button_text, help_clicks,
-            data_button_text, data_clicks, def_button_text, def_clicks, submit_clicks,
+            data_button_text, data_clicks, def_button_text, def_clicks, submit_button_text, submit_clicks,
             sensDrop, authDrop, f1_box, l1_box, f2_box,
             l2_box, ptDrop, rwDrop, passDrop, otpDrop, tool_current, sens_current, sens_current2, auth_current,
-            title_animate, title_text, status_animate]
+            f1C_current, l1C_current, f2C_current, l2C_current, ptDC_current, rwDC_current, pDC_current,
+            otpDC_current, num_clear, r_displayed,
+            title_animate, title_text, status_animate, submit_style]
 
 
 # Run local server

@@ -27,6 +27,11 @@ html {
     font-family: Consolas, Times, serif;
 }
 
+.clickDis {
+opacity: 0.6;
+cursor: not-allowed;
+}
+
 h1 {
 font-size: 48px;
 text-align: center;
