@@ -5,7 +5,7 @@ from dash import dcc
 from dash.dependencies import Input, Output
 
 # Create the Dash app
-app = dash.Dash()
+app = dash.Dash(__name__)
 app.css.append_css({'external_url': '/assets/style.css'})
 
 # Variables
